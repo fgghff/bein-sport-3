@@ -1,314 +1,141 @@
 <!DOCTYPE html>
-
-<html lang="ar">
-
+<html lang="ar" dir="rtl">
 <head>
-
   <meta charset="UTF-8">
-
-  <title>JWPlayer DRM Setup - MPD Only</title>
-
-  <script src="https://content.jwplatform.com/libraries/Z79JsmAO.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.7.1/showdown.min.js"></script>
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-  <script src="https://developer-tools.jwplayer.com/js/tools.min.js"></script>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ربط مكتبة Font Awesome -->
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  <title>جدول المحاضرة اليومي</title>
   <style>
-
-    html, body { 
-
-      margin: 0; 
-
-      padding: 0; 
-
-      height: 100%; 
-
-      overflow: hidden; 
-
-      background-color: #000;
-
-      font-family: 'Cairo', sans-serif;
-
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f6ff;
+      margin: 0;
+      padding: 0;
     }
 
-    .jwplayer { position: relative; width: 100%; height: 100%; }
+    h1 {
+      background-color: #2b45ff;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 22px;
+    }
 
-    .jwplayer .jw-media video { width: 100%; height: 100%; object-fit: fill; }
+    .top-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0;
+    }
 
+    .top-controls label {
+      margin: 5px;
+      font-size: 16px;
+    }
+
+    .top-controls input {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 14px;
+      width: 220px;
+      max-width: 90%;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      margin: 15px auto;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      min-width: 160px;
+      white-space: nowrap;
+    }
+
+    th input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    td input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .time-col {
+      background-color: #e4ecff;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        font-size: 13px;
+        padding: 8px;
+        min-width: 140px;
+      }
+
+      .top-controls input {
+        font-size: 13px;
+      }
+    }
   </style>
-
 </head>
-
 <body>
 
-  <!-- منطقة عرض المشغل -->
-
-  <div id="my-jwplayer"></div>
-
-  
-
-  <script>
-
-    // تعريف متغير حالة التمدد
-
-    let isExpanded = false;
-
-    
-
-    // رمز SVG لزر التمدد
-
-    const expandSvg = `<svg fill="#7f8c8d" version="1.1" id="expand_icon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 100 100" xml:space="preserve">
-
-      <g>
-
-        <path d="M22.661,20.5H36c1.104,0,2-0.896,2-2s-0.896-2-2-2H19c-1.104,0-2.5,1.276-2.5,2.381v17c0,1.104,0.896,2,2,2s2-0.896,2-2V24.876l16.042,15.791c0.391,0.391,1.027,0.586,1.539,0.586s1.086-0.195,1.477-0.586c0.781-0.781,0.812-2.237,0.031-3.019L22.661,20.5z"/>
-
-        <path d="M83,16.5H66c-1.104,0-2,0.896-2,2s0.896,2,2,2h12.605L61.647,37.648c-0.781,0.781-0.781,2.142,0,2.923c0.39,0.391,0.902,0.633,1.414,0.633s0.774-0.171,1.164-0.562l16.274-16.5v11.738c0,1.104,0.896,2,2,2s2-0.896,2-2v-17C84.5,17.776,84.104,16.5,83,16.5z"/>
-
-        <path d="M36.542,60.962L20.5,76.754V65.881c0-1.104-0.896-2-2-2s-2,0.896-2,2v17c0,1.104,1.396,1.619,2.5,1.619h17c1.104,0,2-0.896,2-2s-0.896-2-2-2H22.529L39.62,63.6c0.781-0.781,0.656-1.951-0.125-2.732C38.715,60.086,37.322,60.181,36.542,60.962z"/>
-
-        <path d="M82.5,63.881c-1.104,0-2,0.896-2,2v11.606L64.226,60.962c-0.78-0.781-1.923-0.781-2.703,0c-0.781,0.781-0.719,1.856,0.062,2.638l17.152,16.9H66c-1.104,0-2,0.896-2,2s0.896,2,2,2h17c1.104,0,1.5-0.515,1.5-1.619v-17C84.5,64.776,83.604,63.881,82.5,63.881z"/>
-
-      </g>
-
-    </svg>`;
-
-    
-
-    // دالة تهيئة المشغل مع إعدادات DRM
-
-    function setupPlayer(drmType = 'clearkey') {
-
-      const playerConfig = {
-
-        file: "https://todtv-live-spo-prod.akamaized.net/Content/Channel/svc-spo-hd-10-dt/DASH/playlist.mpd?hdnts=st=1742485022~exp=1742661422~acl=*/Content/Channel/svc-spo-hd-10-dt/DASH/*~id=ADY4HH4AZMTJ~data=aXA9MjEzLjYuOTMuMjA1~hmac=d6bee1cad98f9e654fe2758f664f5c7531118c3495c2a1a8f3b20fbfa70caa1e",
-
-        width: "100%",
-
-        height: "100%",
-
-        autostart: true,
-
-        mute: true,
-
-        skin: {
-
-          name: "seven",
-
-          active: "#9b8d8d",
-
-          inactive: "#7f8c8d",
-
-          background: "#1e1e1e"
-
-        },
-
-        ui: {
-
-          controlbar: {
-
-            children: [
-
-              'playButton',
-
-              'previousButton',
-
-              'nextButton',
-
-              'timeSlider',
-
-              'currentTimeDisplay',
-
-              'durationDisplay',
-
-              'muteButton',
-
-              'volumeButton',
-
-              'captionsButton',
-
-              'qualityButton',
-
-              'playbackRateButton',
-
-              'settingsButton',
-
-              'shareButton',
-
-              'expandButton',
-
-              'fullscreenButton'
-
-            ]
-
-          }
-
-        }
-
-      };
-
-      
-
-      if (drmType === 'clearkey') {
-
-        playerConfig.drm = {
-
-          clearkey: {
-
-            keyId: "cac9184d65ce37898b410b025f3ad20a",
-
-            key: "e14cb7845b06283780efef93eb23eaf6"
-
-          }
-
-        };
-
-      } else if (drmType === 'clearKeys') {
-
-        playerConfig.drm = {
-
-          clearKeys: {
-
-            "cac9184d65ce37898b410b025f3ad20a": "e14cb7845b06283780efef93eb23eaf6"
-
-          }
-
-        };
-
-      }
-
-      
-
-      return jwplayer("my-jwplayer").setup(playerConfig);
-
-    }
-
-    
-
-    // التهيئة الأولية للمشغل
-
-    var player = setupPlayer('clearkey');
-
-    
-
-    // إضافة زر التمدد إلى شريط التحكم
-
-    player.addButton(
-
-      expandSvg,
-
-      'تمدد الفيديو',
-
-      function() { toggleExpand(); },
-
-      'expandButton'
-
-    );
-
-    
-
-    function toggleExpand() {
-
-      const videoElement = document.querySelector("#my-jwplayer video");
-
-      if (!videoElement) return;
-
-      videoElement.style.objectFit = isExpanded ? 'fill' : 'contain';
-
-      isExpanded = !isExpanded;
-
-      updateExpandButtonTooltip();
-
-    }
-
-    
-
-    function updateExpandButtonTooltip() {
-
-      const button = document.querySelector('.jw-expandButton');
-
-      if (button) {
-
-        button.setAttribute('aria-label', isExpanded ? 'تصغير الفيديو' : 'تمدد الفيديو');
-
-      }
-
-    }
-
-    
-
-  //  window.onload = function() {
-
-  //    const videoElement = document.querySelector('#my-jwplayer video');
-
-  //    if (videoElement) { videoElement.style.objectFit = 'fill'; }
-
-  //    const soundToggleButton = document.createElement('button');
-
-  //    soundToggleButton.id = 'sound-toggle';
-
-   //   soundToggleButton.innerHTML = '<i class="fas fa-volume-mute"></i> تفعيل الصوت';
-
-   //   document.body.appendChild(soundToggleButton);
-
-      
-
-   //   soundToggleButton.addEventListener('click', function() {
-
-   //     const currentMute = player.getMute();
-
-   //     player.setMute(!currentMute);
-
-   //     soundToggleButton.innerHTML = !currentMute 
-
-    //      ? '<i class="fas fa-volume-mute"></i> تفعيل الصوت'
-
-   //       : '<i class="fas fa-volume-up"></i> كتم الصوت';
-
-  //    });
-
-   // };
-
-    
-
-    player.on('pause', function() { player.play(); });
-
-    
-
-    window.addEventListener("beforeunload", function () { player.stop(); });
-
-    document.addEventListener("visibilitychange", function() {
-
-      if (document.hidden) { player.stop(); }
-
-    });
-
-    
-
-    player.on('error', function(error) {
-
-      console.error("فشلت طريقة clearkey (" + error.message + ")، سيتم استخدام clearKeys كخطة بديلة");
-
-      jwplayer("my-jwplayer").remove();
-
-      player = setupPlayer('clearKeys');
-
-      player.addButton(expandSvg, 'تمدد الفيديو', function() { toggleExpand(); }, 'expandButton');
-
-    });
-
-  </script>
-
-<script src="https://www.drv.tw/inc/wd.js?s=kwcmfsyk8gjgzexem2p2cq"></script></body>
-
-</html>
-
+  <h1>جدول المحاضرة اليومي</h1>
+
+  <div class="top-controls">
+    <label>
+      محاضرة:
+      <input type="text" value="معهد الشهيد أحمد حسن متراس">
+    </label>
+    <label>
+      اليوم:
+      <input type="text" placeholder="اكتب اليوم هنا">
+    </label>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="text" value="الوقت"></th>
+          <th><input type="text" value="ثانوية الشهيد أحمد حسن متراس"></th>
+          <th><input type="text" value="ثانوية آمنة بنت وهب"></th>
+          <th><input type="text" value="ثانوية العلم النافع"></th>
+          <th><input type="text" value="إعدادية الدورية للبنات"></th>
+          <th><input type="text" value="ثانوية أحمد بن حنبل"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="time-col"><input type="text" value="AM 9:00 - 8:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="AM 10:00 - 9:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="AM 11:00 - 10:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 12:00 - 11:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 1:00 - 12:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 2:00 - 1:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 3:00 - 2:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 4:00 - 3:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td class="time-col"><input type="text" value="PM 5:00 - 4:00"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+                                   </html>
