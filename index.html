@@ -1,112 +1,125 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>فتاوى نور على الدرب - ابن باز</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      color: #222;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 28px;
-      color: #0a9396;
-    }
-
-    .faq {
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      margin-bottom: 25px;
-      transition: all 0.3s ease;
-    }
-
-    .question {
-      font-weight: bold;
-      font-size: 22px;
-      color: #005f73;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-
-    .audio-player {
-      display: none;
-      margin-bottom: 15px;
-    }
-
-    .answer {
-      display: none;
-      font-size: 18px;
-      line-height: 1.9;
-      color: #333;
-      white-space: pre-line;
-    }
-
-    audio {
-      width: 100%;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>قرعة الطلاب الأسبوعية</title>
+<style>
+* {box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, Arial;}
+body {
+    background: linear-gradient(135deg,#74ebd5,#ACB6E5);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+h1 {
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+}
+button {
+    background: #fff;
+    color: #0077cc;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+button:hover {
+    background: #f0f0f0;
+}
+table {
+    width: 90%;
+    max-width: 700px;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+th {
+    background-color: #0077cc;
+    color: #fff;
+    font-size: 18px;
+}
+td {
+    background-color: #f9f9f9;
+    font-size: 16px;
+}
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h1>فتاوى نور على الدرب - الشيخ عبد العزيز بن باز</h1>
-    </div>
+<h1>قرعة الطلاب الأسبوعية</h1>
+<button onclick="generateDraw()">توليد القرعة</button>
 
-    <!-- فتوى 1 -->
-    <div class="faq">
-      <div class="question" onclick="toggleAnswer(this)">
-        هل يجب الأذان على من سمعوه من مكان آخر؟
-      </div>
-      <div class="audio-player">
-        <audio controls>
-          <source src="https://files.zadapps.info/binbaz.org.sa/fatawa/nour_3la_aldarb/nour_001/00101.mp3" type="audio/mpeg">
-          متصفحك لا يدعم تشغيل الصوت.
-        </audio>
-      </div>
-      <div class="answer">
-السؤال: سماحة الشيخ السؤال الأول من السائل يقول: أخوكم في الله يحيى محمد جابر زيداني يقول: إنسان في جماعة وسمع الأذان هل يجب عليه أن يؤذن أو يكفيه الأذان الذي سمعه من مؤذن آخر؟  
-الجواب:
-بسم الله الرحمن الرحيم، الحمد لله، والصلاة والسلام على رسول الله، وعلى آله وأصحابه ومن اهتدى بهداه. أما بعد:
-فالإنسان الذي في جماعة وسمع الأذان من أي مسجد فإن الواجب عليه وعلى الجماعة أن يجيبوا الأذان وأن يتوجهوا إلى المسجد، ولا يصلون في محلهم، ولا حاجة إلى أذان ولا غيره، بل يتوجهون إلى المسجد الذي سمعوا أذانه وهو قريب منهم، بحيث يمكنهم الوصول إليه والصلاة معهم، إذا كان الأذان بالصوت الطبيعي فإن الغالب يكون المسجد قريبًا، أما إذا كان بالمكبر فقد يكون بعيدًا ووصلهم الصوت من بعد.
-فالحاصل: أن الواجب عليهم التوجه إلى المسجد إذا أمكن، أما إن كان بعيداً لا يتيسر الوصول إليه إلا بعد فوات الصلاة لبعده؛ ولأن الصوت سمعوه بواسطة المكبر وهو يأتي من بعيد، فإنهم يكتفون بالأذان هذا وتكفي الإقامة؛ لأن المقصود سماع الأذان ووجود ما يدعو الناس إلى الصلاة ويعلمهم بالوقت، وقد حصل.
+<table>
+    <thead>
+        <tr>
+            <th>اليوم</th>
+            <th>الغداء (طالبان)</th>
+            <th>العشاء (طالبان)</th>
+        </tr>
+    </thead>
+    <tbody id="drawTable">
+        <tr><td>الأحد</td><td>-</td><td>-</td></tr>
+        <tr><td>الإثنين</td><td>-</td><td>-</td></tr>
+        <tr><td>الثلاثاء</td><td>-</td><td>-</td></tr>
+        <tr><td>الأربعاء</td><td>-</td><td>-</td></tr>
+        <tr><td>الخميس</td><td>-</td><td>-</td></tr>
+    </tbody>
+</table>
 
-المقدم: لا، وهو يقول أيضًا في الرسالة: هل يجب عليه أن يؤذن أم يقيم على الأذان الذي يسمعه من حوله؟ أفيدونا.  
-الشيخ: يكفي هذا.  
-المقدم: هذا يعني قريبًا منه.  
-الشيخ: المقصود يكفيه الإقامة، إذا كان ما يتيسر له أن يصلي مع الناس لمرض أو كونه حارسًا أو ما أشبه ذلك، يكفيه الأذان ويقيم، يعني يأتي بالإقامة فقط، أما إذا كان في محل قريب بحيث يستطيع الوصول إلى محل الأذان ويصلي مع الناس، فإن الواجب على هؤلاء السامعين للأذان أن يجيبوا، للحديث: "من سمع النداء فلم يجب فلا صلاة له إلا من عذر" هكذا قال النبي عليه الصلاة والسلام.
-فالواجب على من سمع الأذان أن يجيب المؤذن، ويتوجه إلى المسجد أو محل المسجد ومحل إقامة الجماعة حتى يكثروا السواد، وحتى يحصل الاجتماع على طاعة الله، وحتى يحصل الامتثال لأمر النبي ﷺ في حضور الجماعة. لكن إذا كان هناك مانع من مرض أو خوف، أو كونه حارسًا لمال عنده لا يستطيع التوجه، أو لأن المكان بعيد وسمعوا الصوت من بعيد بسبب المكبر، ولا يستطيعون الوصول إليه إلا وقد فاتتهم الصلاة، فليصلوا في مكانهم ويكتفون بالأذان، فإن أذَّنوا فلا بأس، إن أذَّنوا أذانًا ثانيًا فلا حرج؛ لأنه خير بلا شر، ولاسيما مع البُعد، وإن اكتفوا بالأذان فإنه كافٍ، وعليهم أن يقيموا فقط، على هذا المتخلف لمرض أو خوف أو ما أشبه ذلك أن يقيم الصلاة ويكتفي بالأذان. نعم.
-      </div>
-    </div>
+<script>
+// قائمة الطلاب
+const students = ["عبدالرحمن", "زيد", "أسامة", "عبدالله", "محمد", "خالد"];
+const days = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس"];
 
-    <!-- فتوى 2 -->
-    <div class="faq">
-      <div class="question" onclick="toggleAnswer(this)">
-        حكم طلاق الحامل
-      </div>
-      <div class="audio-player">
-        <audio controls>
-          <source src="https://files.zadapps.info/binbaz.org.sa/fatawa/nour_3la_aldarb/nour_001/00102.mp3" type="audio/mpeg">
-          متصفحك لا يدعم تشغيل الصوت.
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+}
+
+function generateDraw() {
+    const tableBody = document.getElementById("drawTable");
+    const shuffled = shuffle([...students]); // انسخ المصفوفة وامزجها
+    let studentIndex = 0;
+
+    for (let i = 0; i < tableBody.rows.length; i++) {
+        const row = tableBody.rows[i];
+        // الغداء
+        const lunch1 = shuffled[studentIndex % students.length];
+        studentIndex++;
+        const lunch2 = shuffled[studentIndex % students.length];
+        studentIndex++;
+        row.cells[1].innerText = `${lunch1} و ${lunch2}`;
+
+        // العشاء
+        const dinner1 = shuffled[studentIndex % students.length];
+        studentIndex++;
+        const dinner2 = shuffled[studentIndex % students.length];
+        studentIndex++;
+        row.cells[2].innerText = `${dinner1} و ${dinner2}`;
+    }
+}
+</script>
+
+</body>
+</html>          متصفحك لا يدعم تشغيل الصوت.
         </audio>
       </div>
       <div class="answer">
