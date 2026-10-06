@@ -1,128 +1,59 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اختبار الأدب</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f4c45;
-}
-
-.container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 10px;
-}
-
-.header {
-    background: #1f6f63;
-    color: white;
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    position: relative;
-}
-
-.header span {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    font-size: 14px;
-}
-
-.notice {
-    background: #f3e5ab;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.card {
-    background: #eee;
-    margin-top: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    line-height: 1.8;
-}
-
-.question {
-    margin-bottom: 15px;
-}
-
-.q-number {
-    color: red;
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 5px;
-    }
-
-    .header {
-        font-size: 16px;
-    }
-
-    .card {
-        font-size: 14px;
-    }
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشغيل الفيديو داخل المتصفح</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            text-align: center;
+        }
+        video {
+            width: 80%;
+            max-width: 800px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
+        .play-button {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .play-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-
-    <div class="header">
-        <span>السادس الاعدادي</span>
-        اختبار الأدب
+    <div class="video-container">
+        <video id="videoPlayer" controls>
+            <source src="https://www.example.com/video.mp4" type="video/mp4">
+            <!-- قم باستبدال الرابط أعلاه برابط الفيديو الذي ترغب في تشغيله -->
+            متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+        <button class="play-button" onclick="playVideo()">تشغيل الفيديو</button>
     </div>
 
-    <div class="notice">
-        ملاحظة: الإجابة عن أربعة أسئلة
-    </div>
-
-    <div class="card">
-
-        <div class="question">
-            <span class="q-number">س1/</span>
-            <p>أ- ما حال الأدب في العصر الحديث؟</p>
-            <p>ب- ما الحركات القديمة والجديدة التي ظهرت في الشعر العربي؟ وما الحركة المتوقعة التي ظهرت؟</p>
-        </div>
-
-        <div class="question">
-            <span class="q-number">س2/</span>
-            <p>أ- ما الذي ساعد في ظهور جيل الإحياء؟</p>
-            <p>ب- كيف تطورت أشكال القصيدة وفنونها في العصر الحديث؟</p>
-        </div>
-
-        <div class="question">
-            <span class="q-number">س3/</span>
-            <p>أ- المقصود ب جيال الاحياء ؟</p>
-            <p>ب-هل تفاعل العرب مع المعطيات الحضارية الجديدة  ؟</p>
-        </div>
-
-        <div class="question">
-            <span class="q-number">س4/</span>
-            <p>أ- كيف دخلت الاجناس والانواع الادبية الوافدة على الادب العربي ؟</p>
-            
-        </div>
-
-        <div class="question">
-            <span class="q-number">س5/</span>
-            <p>أ- ماذا توحي المعلقات؟</p>
-            <p>ب- ماذا تعرف عن عام 1798م؟</p>
-        </div>
-
-    </div>
-
-</div>
-
+    <script>
+        function playVideo() {
+            const video = document.getElementById('videoPlayer');
+            video.play();
+        }
+    </script>
 </body>
 </html>
