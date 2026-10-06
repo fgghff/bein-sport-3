@@ -1,59 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
+    <title>Fast TV Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تشغيل الفيديو داخل المتصفح</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.10.0/shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.10.0/controls.min.css">
+
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
+            background: #000;
+            overflow: hidden;
         }
-        .video-container {
-            text-align: center;
+
+        #video {
+            object-fit: fill !important;
+            width: 100% !important;
+            height: 100% !important;
         }
-        video {
-            width: 80%;
-            max-width: 800px;
-            border: 2px solid #fff;
-            border-radius: 10px;
+
+        .shaka-seek-bar-container .shaka-seek-bar {
+            background: linear-gradient(
+                to right,
+                #051937,
+                #00205b,
+                #00247e,
+                #22229f,
+                #510dbc
+            );
         }
-        .play-button {
-            margin-top: 20px;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
+
+        .shaka-volume-bar-container .shaka-volume-bar {
+            background: linear-gradient(
+                to right,
+                #051937,
+                #00205b,
+                #00247e,
+                #22229f,
+                #510dbc
+            );
         }
-        .play-button:hover {
-            background-color: #0056b3;
+
+        .shaka-video-container .material-icons-round {
+            color: #00abe2;
+        }
+
+        .shaka-spinner-path {
+            stroke-dasharray: 1, 2000;
+            stroke-dashoffset: 0;
+            animation:
+                dash 1.5s ease-in-out infinite,
+                color 6s ease-in-out infinite;
+            stroke-linecap: round;
+        }
+
+        @keyframes color {
+            100%, 0% {
+                stroke: #d62d20;
+            }
+
+            40% {
+                stroke: #0057e7;
+            }
+
+            66% {
+                stroke: #008744;
+            }
+
+            80%, 90% {
+                stroke: #ffa700;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="video-container">
-        <video id="videoPlayer" controls>
-            <source src="https://cdnv.russiatoday.com/media/vids/2026.06/6a3846ed4c59b712426a5b6b.mp4" type="video/mp4">
-            <!-- قم باستبدال الرابط أعلاه برابط الفيديو الذي ترغب في تشغيله -->
-            متصفحك لا يدعم تشغيل الفيديو.
-        </video>
-        <button class="play-button" onclick="playVideo()">تشغيل الفيديو</button>
+
+    <div
+        data-shaka-player-container
+        style="
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:#000;
+        "
+    >
+        <video
+            id="video"
+            data-shaka-player
+            autoplay
+            playsinline
+            controls
+        ></video>
     </div>
 
     <script>
-        function playVideo() {
-            const video = document.getElementById('videoPlayer');
-            video.play();
+        const videoUrl =
+            "https://cdnv.russiatoday.com/media/vids/2026.06/6a3846ed4c59b712426a5b6b.mp4";
+
+        async function init() {
+
+            const video = document.getElementById("video");
+
+            const ui = video["ui"];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+
+            ui.configure({
+                controlPanelElements: [
+                    "spacer",
+                    "rewind",
+                    "playback_rate",
+                    "fast_forward",
+                    "play_pause",
+                    "mute",
+                    "volume",
+                    "time_and_duration",
+                    "captions",
+                    "fullscreen",
+                    "statistics",
+                    "picture_in_picture",
+                    "skip",
+                    "cast",
+                    "share",
+                    "spacer"
+                ],
+
+                customContextMenu: true,
+
+                contextMenuElements: [
+                    "statistics"
+                ],
+
+                statisticsList: [
+                    "width",
+                    "height",
+                    "playTime",
+                    "bufferingTime",
+                    "started",
+                    "playedCompletely"
+                ],
+
+                playbackRates: [
+                    0.5,
+                    0.75,
+                    1,
+                    1.25,
+                    1.5,
+                    1.75,
+                    2
+                ],
+
+                fastForwardRates: [
+                    2,
+                    4,
+                    8,
+                    1
+                ],
+
+                rewindRates: [
+                    -1,
+                    -2,
+                    -4,
+                    -8
+                ],
+
+                volumeBarColors: {
+                    base: "rgba(255,255,255)",
+                    level: "rgba(255,87,34)"
+                },
+
+                seekBarColors: {
+                    base: "#00EC00",
+                    buffered: "#ffffff",
+                    played: "#ff5722"
+                }
+            });
+
+            window.player = player;
+            window.ui = ui;
+
+            player.addEventListener(
+                "error",
+                onPlayerErrorEvent
+            );
+
+            controls.addEventListener(
+                "error",
+                onUIErrorEvent
+            );
+
+            try {
+
+                await player.load(videoUrl);
+
+                console.log(
+                    "MP4 video loaded successfully"
+                );
+
+            } catch (error) {
+
+                onPlayerError(error);
+
+            }
         }
+
+        function onPlayerErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
+
+        function onUIErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
+
+        function onPlayerError(error) {
+
+            console.error(
+                "Shaka Player Error:",
+                error
+            );
+
+        }
+
+        function initFailed() {
+
+            console.error(
+                "Unable to load Shaka Player UI"
+            );
+
+        }
+
+        document.addEventListener(
+            "shaka-ui-loaded",
+            init
+        );
+
+        document.addEventListener(
+            "shaka-ui-load-failed",
+            initFailed
+        );
     </script>
+
 </body>
 </html>
